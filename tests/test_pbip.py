@@ -150,3 +150,25 @@ def test_registry_is_consistent():
     assert len(METRIC_NAMES) == len(METRICS)
     assert len(set(ENGINE_COLUMNS)) == len(ENGINE_COLUMNS)
     assert by_name("Variance Pct").kind == "ratio"
+
+
+def test_dangling_query_group_reference_fails(project_copy):
+    path = project_copy / DEFINITION / "expressions.tmdl"
+    path.write_text(path.read_text() + "\tqueryGroup: Parameters\n")
+    errors = validate_project(project_copy).errors
+    assert any("queryGroup 'Parameters' is referenced but never defined" in e for e in errors)
+
+
+def test_defined_query_group_reference_passes(project_copy):
+    path = project_copy / DEFINITION / "expressions.tmdl"
+    path.write_text(path.read_text() + "\tqueryGroup: Parameters\n")
+    model = project_copy / DEFINITION / "model.tmdl"
+    model.write_text(
+        model.read_text() + "\nqueryGroup Parameters\n\tannotation PBI_QueryGroupOrder = 0\n"
+    )
+    assert validate_project(project_copy).ok
+
+
+def test_shipped_model_has_no_query_group_references():
+    model = load_model(REPO / "powerbi" / DEFINITION)
+    assert model.query_group_refs == []

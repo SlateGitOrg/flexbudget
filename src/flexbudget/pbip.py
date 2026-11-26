@@ -128,6 +128,12 @@ def _check_columns(model: Model, data_dir: Path, report: Report) -> None:
                 )
 
 
+def _check_query_groups(model: Model, report: Report) -> None:
+    for file, group in model.query_group_refs:
+        if group not in model.query_groups:
+            report.errors.append(f"{file}: queryGroup '{group}' is referenced but never defined")
+
+
 def _check_registry(model: Model, report: Report) -> None:
     names = {m.name for m in model.measures()}
     for name in sorted(names - METRIC_NAMES):
@@ -212,6 +218,7 @@ def validate_project(project_dir: str | Path, data_dir: str | Path | None = None
     _check_measures(model, report)
     _check_columns(model, Path(data_dir) if data_dir else project / "data", report)
     _check_registry(model, report)
+    _check_query_groups(model, report)
     _check_relationships(model, report)
     report_json = reports[0] / "report.json"
     if report_json.exists():

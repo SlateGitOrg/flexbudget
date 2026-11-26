@@ -1,3 +1,2 @@
 expression DataFolder = "C:\flexbudget\powerbi\data" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
 	lineageTag: 81fd9e7a-41e9-5a88-9e7d-1150c474003b
-	queryGroup: Parameters

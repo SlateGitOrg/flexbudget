@@ -47,6 +47,8 @@ class Model:
     tables: dict[str, Table] = field(default_factory=dict)
     relationships: list[Relationship] = field(default_factory=list)
     expressions: list[str] = field(default_factory=list)
+    query_groups: set[str] = field(default_factory=set)  # declared: `queryGroup Name`
+    query_group_refs: list[tuple[str, str]] = field(default_factory=list)  # (file, group name)
 
     def measures(self) -> list[Measure]:
         return [m for t in self.tables.values() for m in t.measures]
@@ -133,4 +135,12 @@ def load_model(definition_dir: Path) -> Model:
         for line in expr_path.read_text(encoding="utf-8").splitlines():
             if line.startswith("expression "):
                 model.expressions.append(unquote(line[len("expression ") :].split("=")[0]))
+    for path in sorted(definition_dir.rglob("*.tmdl")):
+        for line in path.read_text(encoding="utf-8").splitlines():
+            stripped = line.strip()
+            if line.startswith("queryGroup "):
+                model.query_groups.add(unquote(line[len("queryGroup ") :]))
+            elif stripped.startswith("queryGroup:"):
+                group = unquote(stripped.split(":", 1)[1])
+                model.query_group_refs.append((path.name, group))
     return model
