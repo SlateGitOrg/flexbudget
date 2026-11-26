@@ -1,0 +1,53 @@
+table DimDate
+	lineageTag: 64400293-9ad9-5bea-a35a-8fe1afd87daf
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		isKey
+		lineageTag: 95ba2c63-6917-5a50-b600-d37df185c0ce
+		summarizeBy: none
+		sourceColumn: Date
+
+	column Year
+		dataType: int64
+		lineageTag: 7c2abf07-ba23-5e86-8bc5-08aa345571da
+		summarizeBy: sum
+		sourceColumn: Year
+
+	column MonthNumber
+		dataType: int64
+		lineageTag: c7e28832-6641-5c3e-8fc0-3b0490fcde96
+		summarizeBy: sum
+		sourceColumn: MonthNumber
+
+	column MonthName
+		dataType: string
+		lineageTag: 173d5828-69cf-5f0e-b7b4-4fd197a7acc7
+		summarizeBy: none
+		sourceColumn: MonthName
+
+	column YearMonth
+		dataType: string
+		lineageTag: ae3cceae-b197-5ae8-8fac-a33b759a6657
+		summarizeBy: none
+		sourceColumn: YearMonth
+
+	column FiscalYear
+		dataType: string
+		lineageTag: 5946af21-9a4b-5aa8-be19-afd571d5cae7
+		summarizeBy: none
+		sourceColumn: FiscalYear
+
+	partition DimDate = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "/DimDate.csv"), [Delimiter=",", Columns=6, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"Date", type date}, {"Year", Int64.Type}, {"MonthNumber", Int64.Type}, {"MonthName", type text}, {"YearMonth", type text}, {"FiscalYear", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

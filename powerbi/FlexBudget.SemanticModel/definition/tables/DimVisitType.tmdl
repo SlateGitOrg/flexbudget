@@ -1,0 +1,32 @@
+table DimVisitType
+	lineageTag: 93ef0b49-712c-522f-8908-37fecf9f2b71
+
+	column VisitType
+		dataType: string
+		lineageTag: 7a53f3ae-0d9c-5b09-91ff-5c4a53216914
+		summarizeBy: none
+		sourceColumn: VisitType
+
+	column VisitTypeName
+		dataType: string
+		lineageTag: ce3f3a14-4057-5aa0-9e55-6148339b552c
+		summarizeBy: none
+		sourceColumn: VisitTypeName
+
+	column SortOrder
+		dataType: int64
+		lineageTag: 4266115b-b1a4-5d2e-84f7-5bfd94e70bdd
+		summarizeBy: sum
+		sourceColumn: SortOrder
+
+	partition DimVisitType = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "/DimVisitType.csv"), [Delimiter=",", Columns=3, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"VisitType", type text}, {"VisitTypeName", type text}, {"SortOrder", Int64.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

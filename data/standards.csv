@@ -1,0 +1,14 @@
+line,visit_type,driver,value
+medical_supplies,preventive,usd_per_visit,6.0
+medical_supplies,sick,usd_per_visit,9.18
+medical_supplies,urgent,usd_per_visit,20.8
+medical_supplies,procedure,usd_per_visit,37.24
+lab_sendouts,preventive,usd_per_visit,12.36
+lab_sendouts,sick,usd_per_visit,9.7
+lab_sendouts,urgent,usd_per_visit,14.0
+lab_sendouts,procedure,usd_per_visit,20.4
+clinical_labour,preventive,hours_per_visit,0.55
+clinical_labour,sick,hours_per_visit,0.51
+clinical_labour,urgent,hours_per_visit,0.75
+clinical_labour,procedure,hours_per_visit,1.176
+clinical_labour,ALL,usd_per_hour,44.0

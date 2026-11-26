@@ -1,0 +1,456 @@
+{
+  "seed": 7,
+  "wage_standard": 44.0,
+  "true_cost_per_visit": {
+    "medical_supplies": {
+      "preventive": 6.0,
+      "sick": 9.0,
+      "urgent": 26.0,
+      "procedure": 38.0
+    },
+    "lab_sendouts": {
+      "preventive": 12.0,
+      "sick": 10.0,
+      "urgent": 14.0,
+      "procedure": 20.0
+    },
+    "clinical_labour": {
+      "preventive": 24.2,
+      "sick": 22.0,
+      "urgent": 33.0,
+      "procedure": 52.8
+    }
+  },
+  "true_hours_per_visit": {
+    "preventive": 0.55,
+    "sick": 0.5,
+    "urgent": 0.75,
+    "procedure": 1.2
+  },
+  "standard_errors": [
+    {
+      "line": "medical_supplies",
+      "visit_type": "urgent",
+      "standard_to_truth": 0.8
+    }
+  ],
+  "effects": [
+    {
+      "kind": "volume_surge",
+      "clinic": "C07",
+      "lines": [
+        "clinical_labour",
+        "medical_supplies",
+        "lab_sendouts"
+      ],
+      "first_month_index": 13,
+      "last_month_index": 24,
+      "first_month": "2024-07",
+      "last_month": "2025-06"
+    },
+    {
+      "kind": "supply_overspend",
+      "clinic": "C12",
+      "lines": [
+        "medical_supplies"
+      ],
+      "first_month_index": 15,
+      "last_month_index": 24,
+      "first_month": "2024-09",
+      "last_month": "2025-06"
+    },
+    {
+      "kind": "mix_shift",
+      "clinic": "C03",
+      "lines": [
+        "medical_supplies"
+      ],
+      "first_month_index": 13,
+      "last_month_index": 24,
+      "first_month": "2024-07",
+      "last_month": "2025-06"
+    },
+    {
+      "kind": "agency_wages",
+      "clinic": "C15",
+      "lines": [
+        "clinical_labour"
+      ],
+      "first_month_index": 16,
+      "last_month_index": 18,
+      "first_month": "2024-10",
+      "last_month": "2024-12"
+    },
+    {
+      "kind": "closure",
+      "clinic": "C09",
+      "lines": [
+        "clinical_labour",
+        "medical_supplies",
+        "lab_sendouts"
+      ],
+      "first_month_index": 20,
+      "last_month_index": 20,
+      "first_month": "2025-02",
+      "last_month": "2025-02"
+    }
+  ],
+  "active_by_month": {
+    "2023-07": [],
+    "2023-08": [],
+    "2023-09": [],
+    "2023-10": [],
+    "2023-11": [],
+    "2023-12": [],
+    "2024-01": [],
+    "2024-02": [],
+    "2024-03": [],
+    "2024-04": [],
+    "2024-05": [],
+    "2024-06": [],
+    "2024-07": [
+      {
+        "clinic": "C07",
+        "line": "clinical_labour",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "medical_supplies",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "lab_sendouts",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C03",
+        "line": "medical_supplies",
+        "kind": "mix_shift"
+      }
+    ],
+    "2024-08": [
+      {
+        "clinic": "C07",
+        "line": "clinical_labour",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "medical_supplies",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "lab_sendouts",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C03",
+        "line": "medical_supplies",
+        "kind": "mix_shift"
+      }
+    ],
+    "2024-09": [
+      {
+        "clinic": "C07",
+        "line": "clinical_labour",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "medical_supplies",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "lab_sendouts",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C12",
+        "line": "medical_supplies",
+        "kind": "supply_overspend"
+      },
+      {
+        "clinic": "C03",
+        "line": "medical_supplies",
+        "kind": "mix_shift"
+      }
+    ],
+    "2024-10": [
+      {
+        "clinic": "C07",
+        "line": "clinical_labour",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "medical_supplies",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "lab_sendouts",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C12",
+        "line": "medical_supplies",
+        "kind": "supply_overspend"
+      },
+      {
+        "clinic": "C03",
+        "line": "medical_supplies",
+        "kind": "mix_shift"
+      },
+      {
+        "clinic": "C15",
+        "line": "clinical_labour",
+        "kind": "agency_wages"
+      }
+    ],
+    "2024-11": [
+      {
+        "clinic": "C07",
+        "line": "clinical_labour",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "medical_supplies",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "lab_sendouts",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C12",
+        "line": "medical_supplies",
+        "kind": "supply_overspend"
+      },
+      {
+        "clinic": "C03",
+        "line": "medical_supplies",
+        "kind": "mix_shift"
+      },
+      {
+        "clinic": "C15",
+        "line": "clinical_labour",
+        "kind": "agency_wages"
+      }
+    ],
+    "2024-12": [
+      {
+        "clinic": "C07",
+        "line": "clinical_labour",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "medical_supplies",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "lab_sendouts",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C12",
+        "line": "medical_supplies",
+        "kind": "supply_overspend"
+      },
+      {
+        "clinic": "C03",
+        "line": "medical_supplies",
+        "kind": "mix_shift"
+      },
+      {
+        "clinic": "C15",
+        "line": "clinical_labour",
+        "kind": "agency_wages"
+      }
+    ],
+    "2025-01": [
+      {
+        "clinic": "C07",
+        "line": "clinical_labour",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "medical_supplies",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "lab_sendouts",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C12",
+        "line": "medical_supplies",
+        "kind": "supply_overspend"
+      },
+      {
+        "clinic": "C03",
+        "line": "medical_supplies",
+        "kind": "mix_shift"
+      }
+    ],
+    "2025-02": [
+      {
+        "clinic": "C07",
+        "line": "clinical_labour",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "medical_supplies",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "lab_sendouts",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C12",
+        "line": "medical_supplies",
+        "kind": "supply_overspend"
+      },
+      {
+        "clinic": "C03",
+        "line": "medical_supplies",
+        "kind": "mix_shift"
+      },
+      {
+        "clinic": "C09",
+        "line": "clinical_labour",
+        "kind": "closure"
+      },
+      {
+        "clinic": "C09",
+        "line": "medical_supplies",
+        "kind": "closure"
+      },
+      {
+        "clinic": "C09",
+        "line": "lab_sendouts",
+        "kind": "closure"
+      }
+    ],
+    "2025-03": [
+      {
+        "clinic": "C07",
+        "line": "clinical_labour",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "medical_supplies",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "lab_sendouts",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C12",
+        "line": "medical_supplies",
+        "kind": "supply_overspend"
+      },
+      {
+        "clinic": "C03",
+        "line": "medical_supplies",
+        "kind": "mix_shift"
+      }
+    ],
+    "2025-04": [
+      {
+        "clinic": "C07",
+        "line": "clinical_labour",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "medical_supplies",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "lab_sendouts",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C12",
+        "line": "medical_supplies",
+        "kind": "supply_overspend"
+      },
+      {
+        "clinic": "C03",
+        "line": "medical_supplies",
+        "kind": "mix_shift"
+      }
+    ],
+    "2025-05": [
+      {
+        "clinic": "C07",
+        "line": "clinical_labour",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "medical_supplies",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "lab_sendouts",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C12",
+        "line": "medical_supplies",
+        "kind": "supply_overspend"
+      },
+      {
+        "clinic": "C03",
+        "line": "medical_supplies",
+        "kind": "mix_shift"
+      }
+    ],
+    "2025-06": [
+      {
+        "clinic": "C07",
+        "line": "clinical_labour",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "medical_supplies",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C07",
+        "line": "lab_sendouts",
+        "kind": "volume_surge"
+      },
+      {
+        "clinic": "C12",
+        "line": "medical_supplies",
+        "kind": "supply_overspend"
+      },
+      {
+        "clinic": "C03",
+        "line": "medical_supplies",
+        "kind": "mix_shift"
+      }
+    ]
+  }
+}

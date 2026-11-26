@@ -1,0 +1,148 @@
+table FactCost
+	lineageTag: 2cb890cf-486d-5a03-b6da-54bf304bbc04
+
+	measure 'Actual Cost' = SUM(FactCost[ActualCost])
+		formatString: #,0.00
+		lineageTag: bb56f490-6134-5bc7-ae85-5bedf2748dc7
+
+	measure 'Fixed Budget' = SUM(FactBudget[FixedBudget])
+		formatString: #,0.00
+		lineageTag: ecf771ab-6c69-54fb-8dc4-ab3bf61ac36a
+
+	measure 'Budget Visits' =
+		CALCULATE(
+			SUM(FactBudget[BudgetVisits]),
+			REMOVEFILTERS(DimCostLine)
+		)
+		formatString: #,0
+		lineageTag: 538e0957-9dbc-5e4a-b8e4-9e15e8498ef1
+
+	measure 'Actual Visits' = SUM(FactVisits[ActualVisits])
+		formatString: #,0
+		lineageTag: 5d798935-5379-5c7a-ac79-a24b760dbcba
+
+	measure 'Static Budget' =
+		SUMX(
+			Standards,
+			Standards[UnitCost]
+				* CALCULATE(
+					SUM(FactBudget[BudgetVisits]),
+					REMOVEFILTERS(DimCostLine),
+					FactBudget[VisitType] = Standards[VisitType]
+				)
+		)
+		+ [Fixed Budget]
+		formatString: #,0.00
+		lineageTag: 7d284b7f-e127-53e0-b6ef-52ee17905b4a
+
+	measure 'Flexed Budget' =
+		SUMX(
+			CROSSJOIN(VALUES(DimClinic[ClinicId]), VALUES(DimDate[Date])),
+			DIVIDE([Actual Visits], [Budget Visits]) * ([Static Budget] - [Fixed Budget])
+		)
+		+ [Fixed Budget]
+		formatString: #,0.00
+		lineageTag: ba924d67-04d1-52f5-97fe-aa5975e47eab
+
+	measure 'Flexed Budget Actual Mix' =
+		SUMX(
+			Standards,
+			Standards[UnitCost]
+				* CALCULATE(
+					SUM(FactVisits[ActualVisits]),
+					FactVisits[VisitType] = Standards[VisitType]
+				)
+		)
+		+ [Fixed Budget]
+		formatString: #,0.00
+		lineageTag: cfd03a55-0261-5c5a-a034-fdfb52b99c33
+
+	measure 'Volume Variance' = [Flexed Budget] - [Static Budget]
+		formatString: #,0.00
+		lineageTag: 8d3b9bc7-e634-525b-b1e5-0b99531a5bc8
+
+	measure 'Mix Variance' = [Flexed Budget Actual Mix] - [Flexed Budget]
+		formatString: #,0.00
+		lineageTag: 6a8c69fc-3a2c-5f29-86fb-3455437951f2
+
+	measure 'Spending Variance' = [Actual Cost] - [Flexed Budget Actual Mix]
+		formatString: #,0.00
+		lineageTag: fe041c55-1412-5db6-9b92-0256e01c253a
+
+	measure 'Wage Rate Variance' =
+		CALCULATE(
+			SUM(FactCost[ActualCost]) - MAX(Standards[StdWageRate]) * SUM(FactCost[ActualHours]),
+			KEEPFILTERS(DimCostLine[CostLine] = "clinical_labour")
+		)
+		formatString: #,0.00
+		lineageTag: ee66ea30-a780-5013-a43d-cae382acc23a
+
+	measure 'Efficiency Variance' =
+		CALCULATE(
+			MAX(Standards[StdWageRate])
+				* (
+					SUM(FactCost[ActualHours])
+						- SUMX(
+							Standards,
+							Standards[StdHours]
+								* CALCULATE(
+									SUM(FactVisits[ActualVisits]),
+									FactVisits[VisitType] = Standards[VisitType]
+								)
+						)
+				),
+			KEEPFILTERS(DimCostLine[CostLine] = "clinical_labour")
+		)
+		formatString: #,0.00
+		lineageTag: 4e0f25c6-938a-51a3-8672-e7e87bc22a69
+
+	measure 'Total Variance' = [Actual Cost] - [Static Budget]
+		formatString: #,0.00
+		lineageTag: 15af06cd-1787-59af-a5a3-ba50217c5b3d
+
+	measure 'Variance Pct' = DIVIDE([Total Variance], [Flexed Budget])
+		formatString: 0.0%
+		lineageTag: 73e7e83b-531b-5b17-a706-32b731c9e609
+
+	column ClinicId
+		dataType: string
+		lineageTag: ed004787-28e2-5754-98ba-e7ee3ae74756
+		summarizeBy: none
+		sourceColumn: ClinicId
+
+	column Date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 57520609-d74c-5649-9d98-609f4ff04403
+		summarizeBy: none
+		sourceColumn: Date
+
+	column CostLine
+		dataType: string
+		lineageTag: 42ecd2ad-7f14-5c9f-aa14-5128dab3ed75
+		summarizeBy: none
+		sourceColumn: CostLine
+
+	column ActualCost
+		dataType: double
+		lineageTag: f18888be-e2fd-5bc7-ba98-a9a0291d4f21
+		summarizeBy: sum
+		sourceColumn: ActualCost
+
+	column ActualHours
+		dataType: double
+		lineageTag: 8dc418d5-a68d-560b-a8b7-7efdd7ab5727
+		summarizeBy: sum
+		sourceColumn: ActualHours
+
+	partition FactCost = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "/FactCost.csv"), [Delimiter=",", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"ClinicId", type text}, {"Date", type date}, {"CostLine", type text}, {"ActualCost", type number}, {"ActualHours", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

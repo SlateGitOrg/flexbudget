@@ -1,0 +1,38 @@
+table DimCostLine
+	lineageTag: 799c43bb-acc9-5ed9-a0fe-5fe15712fd8c
+
+	column CostLine
+		dataType: string
+		lineageTag: b7bb5005-bc4c-51df-a9b3-a2b6e16b1c72
+		summarizeBy: none
+		sourceColumn: CostLine
+
+	column CostLineName
+		dataType: string
+		lineageTag: a10a534d-c7e8-5641-bc5d-578d0821a0c6
+		summarizeBy: none
+		sourceColumn: CostLineName
+
+	column Behavior
+		dataType: string
+		lineageTag: 31ef8384-27be-5054-8f5a-e5ad632d90e3
+		summarizeBy: none
+		sourceColumn: Behavior
+
+	column SortOrder
+		dataType: int64
+		lineageTag: 5ae4480d-a639-5bb0-b0c2-2f16100358f5
+		summarizeBy: sum
+		sourceColumn: SortOrder
+
+	partition DimCostLine = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "/DimCostLine.csv"), [Delimiter=",", Columns=4, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"CostLine", type text}, {"CostLineName", type text}, {"Behavior", type text}, {"SortOrder", Int64.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

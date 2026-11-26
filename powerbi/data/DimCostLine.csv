@@ -1,0 +1,8 @@
+CostLine,CostLineName,Behavior,SortOrder
+clinical_labour,Clinical labour,Variable,1
+medical_supplies,Medical supplies,Variable,2
+lab_sendouts,Lab send-outs,Variable,3
+rent,Rent,Fixed,4
+it,IT,Fixed,5
+admin_staff,Admin staff,Fixed,6
+utilities,Utilities,Fixed,7

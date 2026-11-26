@@ -1,0 +1,39 @@
+table FactVisits
+	lineageTag: 6ab70515-517e-5f5c-9627-6e23833866e4
+
+	column ClinicId
+		dataType: string
+		lineageTag: 97b4a046-c226-589a-b881-254b17a7844e
+		summarizeBy: none
+		sourceColumn: ClinicId
+
+	column Date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 690dfa61-a99c-522c-b942-918eae288d63
+		summarizeBy: none
+		sourceColumn: Date
+
+	column VisitType
+		dataType: string
+		lineageTag: 02e3e213-5602-57d8-961c-2b9a4c54cfcf
+		summarizeBy: none
+		sourceColumn: VisitType
+
+	column ActualVisits
+		dataType: int64
+		lineageTag: 9631067e-f74c-586e-8d44-4f7c9e0ab2be
+		summarizeBy: sum
+		sourceColumn: ActualVisits
+
+	partition FactVisits = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "/FactVisits.csv"), [Delimiter=",", Columns=4, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"ClinicId", type text}, {"Date", type date}, {"VisitType", type text}, {"ActualVisits", Int64.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

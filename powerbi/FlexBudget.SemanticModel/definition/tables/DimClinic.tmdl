@@ -1,0 +1,38 @@
+table DimClinic
+	lineageTag: 36926f73-23b6-5a04-b9aa-58d57b85c6ba
+
+	column ClinicId
+		dataType: string
+		lineageTag: b843a796-b66e-5309-886c-b9b80a740659
+		summarizeBy: none
+		sourceColumn: ClinicId
+
+	column ClinicName
+		dataType: string
+		lineageTag: 8ed3864d-2562-554b-8dcf-8a8f53a68b6f
+		summarizeBy: none
+		sourceColumn: ClinicName
+
+	column ClinicType
+		dataType: string
+		lineageTag: c776bea6-1ceb-5c9c-ac42-5d9fd9c5c799
+		summarizeBy: none
+		sourceColumn: ClinicType
+
+	column Region
+		dataType: string
+		lineageTag: 499ba208-a67a-5bc0-8bab-d327a157afb8
+		summarizeBy: none
+		sourceColumn: Region
+
+	partition DimClinic = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "/DimClinic.csv"), [Delimiter=",", Columns=4, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"ClinicId", type text}, {"ClinicName", type text}, {"ClinicType", type text}, {"Region", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,51 @@
+table FactBudget
+	lineageTag: a51823f4-e276-5285-b9d5-573b0d417d22
+
+	column ClinicId
+		dataType: string
+		lineageTag: 98e15bc0-6b34-505e-acc1-4f6de9b93dc9
+		summarizeBy: none
+		sourceColumn: ClinicId
+
+	column Date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 327dd1ad-ec3a-5207-a1c6-a6bfe2f9850f
+		summarizeBy: none
+		sourceColumn: Date
+
+	column CostLine
+		dataType: string
+		lineageTag: d2b70f0b-8ed2-54e3-b834-414b389c39c4
+		summarizeBy: none
+		sourceColumn: CostLine
+
+	column VisitType
+		dataType: string
+		lineageTag: 65805b37-328a-5e00-94be-d28d059d80b6
+		summarizeBy: none
+		sourceColumn: VisitType
+
+	column BudgetVisits
+		dataType: int64
+		lineageTag: c3cb8bf0-4333-53a2-a6fe-893afe15593c
+		summarizeBy: sum
+		sourceColumn: BudgetVisits
+
+	column FixedBudget
+		dataType: double
+		lineageTag: ae0d3e10-1d59-538f-ae78-050cc584cd79
+		summarizeBy: sum
+		sourceColumn: FixedBudget
+
+	partition FactBudget = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "/FactBudget.csv"), [Delimiter=",", Columns=6, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"ClinicId", type text}, {"Date", type date}, {"CostLine", type text}, {"VisitType", type text}, {"BudgetVisits", Int64.Type}, {"FixedBudget", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

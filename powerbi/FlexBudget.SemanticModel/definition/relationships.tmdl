@@ -1,0 +1,59 @@
+relationship 264584d4-f5e4-5ebd-91b1-30a05421b613
+	fromColumn: FactCost.ClinicId
+	toColumn: DimClinic.ClinicId
+
+relationship ea8b3915-dbaa-53c8-bf89-797d414a31a1
+	fromColumn: FactCost.Date
+	toColumn: DimDate.Date
+
+relationship 7f7f44d0-9829-587e-9415-92156a9fb469
+	fromColumn: FactCost.CostLine
+	toColumn: DimCostLine.CostLine
+
+relationship 4758954d-b27a-55c7-93a3-da14d1c5f090
+	fromColumn: FactVisits.ClinicId
+	toColumn: DimClinic.ClinicId
+
+relationship e5c81eb1-7d40-58a4-8445-2c61a8b687ce
+	fromColumn: FactVisits.Date
+	toColumn: DimDate.Date
+
+relationship 5a21e664-1fb5-5454-9bb2-142183d65ed9
+	fromColumn: FactVisits.VisitType
+	toColumn: DimVisitType.VisitType
+
+relationship be7ab707-f260-5ef1-ae81-8a250bb69eac
+	fromColumn: FactBudget.ClinicId
+	toColumn: DimClinic.ClinicId
+
+relationship f26c78f7-92e8-52ce-9660-2ba74d92dd29
+	fromColumn: FactBudget.Date
+	toColumn: DimDate.Date
+
+relationship f586cd95-931f-514c-9b25-d11b98e5695b
+	fromColumn: FactBudget.CostLine
+	toColumn: DimCostLine.CostLine
+
+relationship 019db6c8-8503-5f94-946a-b6614b1e5064
+	fromColumn: FactBudget.VisitType
+	toColumn: DimVisitType.VisitType
+
+relationship 55052ee6-bb9b-5675-aa82-f9c16ce98df4
+	fromColumn: Standards.CostLine
+	toColumn: DimCostLine.CostLine
+
+relationship 0b522b7e-00e2-51d3-aff5-fade835edb0c
+	fromColumn: Standards.VisitType
+	toColumn: DimVisitType.VisitType
+
+relationship d6f59416-e643-5174-82b3-734153acadf4
+	fromColumn: FactVariance.ClinicId
+	toColumn: DimClinic.ClinicId
+
+relationship 7390cb87-91e4-5a1c-ac3c-b2ce0588e4e0
+	fromColumn: FactVariance.Date
+	toColumn: DimDate.Date
+
+relationship 6a751562-931d-5bea-aeaa-c2e3000076c1
+	fromColumn: FactVariance.CostLine
+	toColumn: DimCostLine.CostLine

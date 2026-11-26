@@ -1,0 +1,44 @@
+table Standards
+	lineageTag: 8a126f04-c13d-57dd-a161-e2d8e4d73de2
+
+	column CostLine
+		dataType: string
+		lineageTag: 6e6b4c17-9a66-594c-a127-9d853b1a0fa0
+		summarizeBy: none
+		sourceColumn: CostLine
+
+	column VisitType
+		dataType: string
+		lineageTag: 61c167ea-cbd8-5d50-bef3-e5ba14368a91
+		summarizeBy: none
+		sourceColumn: VisitType
+
+	column UnitCost
+		dataType: double
+		lineageTag: 3ad943cd-8101-5060-a3dc-f546e14db462
+		summarizeBy: sum
+		sourceColumn: UnitCost
+
+	column StdHours
+		dataType: double
+		lineageTag: 8525c9e0-dcc7-5afa-9e03-13b1bec941c4
+		summarizeBy: sum
+		sourceColumn: StdHours
+
+	column StdWageRate
+		dataType: double
+		lineageTag: c41fc461-67f2-57e9-88a2-ae401b215811
+		summarizeBy: sum
+		sourceColumn: StdWageRate
+
+	partition Standards = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "/Standards.csv"), [Delimiter=",", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"CostLine", type text}, {"VisitType", type text}, {"UnitCost", type number}, {"StdHours", type number}, {"StdWageRate", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

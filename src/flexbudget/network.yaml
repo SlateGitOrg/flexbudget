@@ -1,0 +1,103 @@
+# Scenario for the synthetic clinic network. Everything the generator needs lives here: the true
+# cost drivers, the budget standards (as an offset from the truth), clinic sizes and the
+# deliberately injected patterns that the analysis has to recover.
+start_month: "2023-07"
+months: 24
+budget_growth_per_year: 0.03
+wage_standard: 44.0
+
+# True cost per visit (USD) and true clinical hours per visit.
+true_cost_per_visit:
+  medical_supplies: {preventive: 6.0, sick: 9.0, urgent: 26.0, procedure: 38.0}
+  lab_sendouts: {preventive: 12.0, sick: 10.0, urgent: 14.0, procedure: 20.0}
+true_hours_per_visit: {preventive: 0.55, sick: 0.50, urgent: 0.75, procedure: 1.20}
+
+# Budget standard = truth x (1 + offset). Urgent supplies are set 20% below the truth.
+standard_offset:
+  medical_supplies: {preventive: 0.0, sick: 0.02, urgent: -0.20, procedure: -0.02}
+  lab_sendouts: {preventive: 0.03, sick: -0.03, urgent: 0.0, procedure: 0.02}
+  clinical_hours: {preventive: 0.0, sick: 0.02, urgent: 0.0, procedure: -0.02}
+
+# Seasonal profile per visit type: 1 + sum of harmonics amplitude * cos(2 pi (month - peak) / period).
+# Each profile averages to 1 over a year. A 12-month harmonic gives the main swing and a
+# 6-month harmonic a second bump, so the four profiles are linearly independent.
+seasonality:
+  preventive:
+    - {period: 12, amplitude: 0.35, peak_month: 9}
+    - {period: 6, amplitude: 0.25, peak_month: 4}
+  sick:
+    - {period: 12, amplitude: 0.55, peak_month: 1}
+    - {period: 6, amplitude: 0.10, peak_month: 2}
+  urgent:
+    - {period: 12, amplitude: 0.35, peak_month: 7}
+    - {period: 6, amplitude: 0.20, peak_month: 3}
+  procedure:
+    - {period: 12, amplitude: 0.15, peak_month: 11}
+    - {period: 6, amplitude: 0.30, peak_month: 6}
+
+# Visit mix by clinic type (shares of visits, in visit-type order).
+mix:
+  primary: {preventive: 0.46, sick: 0.32, urgent: 0.08, procedure: 0.14}
+  urgent_care: {preventive: 0.12, sick: 0.28, urgent: 0.45, procedure: 0.15}
+
+fixed_monthly:
+  rent: {primary: 18000, urgent_care: 14000}
+  it: {primary: 4200, urgent_care: 3600}
+  admin_staff: {primary: 28000, urgent_care: 21000}
+  utilities: {primary: 5200, urgent_care: 4300}
+utilities_seasonal_amplitude: 0.12
+
+noise:
+  cost: 0.02          # actual cost lines are the truth times a uniform draw within +/-2%
+  volume_clinic_month: 0.03   # sd of the clinic-month volume surprise (all types together)
+  volume_type: 0.20           # sd of the extra surprise for each visit type
+  clinic_wage_factor: 0.01    # sd of each clinic's permanent wage-rate difference
+  clinic_efficiency_factor: 0.01  # sd of each clinic's permanent hours-per-visit difference
+
+clinics:
+  - {id: C01, name: Riverside, type: primary, region: North, base_visits: 2300}
+  - {id: C02, name: Maple Grove, type: urgent_care, region: North, base_visits: 780}
+  - {id: C03, name: Harbor View, type: primary, region: East, base_visits: 3000}
+  - {id: C04, name: Cedar Park, type: primary, region: East, base_visits: 2100}
+  - {id: C05, name: Lakeside, type: primary, region: South, base_visits: 2600}
+  - {id: C06, name: Northgate, type: urgent_care, region: North, base_visits: 820}
+  - {id: C07, name: Eastwood, type: primary, region: East, base_visits: 2700}
+  - {id: C08, name: Fairmont, type: primary, region: West, base_visits: 1900}
+  - {id: C09, name: Hillcrest, type: primary, region: West, base_visits: 2400}
+  - {id: C10, name: Oak Terrace, type: primary, region: South, base_visits: 2800}
+  - {id: C11, name: Pine Ridge, type: urgent_care, region: West, base_visits: 750}
+  - {id: C12, name: Westbrook, type: primary, region: West, base_visits: 3200}
+  - {id: C13, name: Summit, type: primary, region: South, base_visits: 2000}
+  - {id: C14, name: Meadowlane, type: primary, region: North, base_visits: 2500}
+  - {id: C15, name: Brookfield, type: primary, region: East, base_visits: 2500}
+  - {id: C16, name: Stonebridge, type: urgent_care, region: South, base_visits: 850}
+  - {id: C17, name: Elmhurst, type: primary, region: West, base_visits: 2200}
+  - {id: C18, name: Parkview, type: primary, region: North, base_visits: 2700}
+
+# Budget mix for C03 (its budget assumes 20% urgent visits).
+budget_mix_override:
+  C03: {preventive: 0.40, sick: 0.30, urgent: 0.20, procedure: 0.10}
+
+injections:
+  volume_surge:        # actual visits +25% at the budgeted mix, costs exactly at standard, no noise
+    clinic: C07
+    first_month_index: 13
+    factor: 1.25
+  supply_overspend:    # supplies cost 18% above standard cost, volume flat to budget, no noise
+    clinic: C12
+    first_month_index: 15
+    factor: 1.18
+  mix_shift:           # urgent share climbs linearly from its budgeted level (~20%) to double that (~40%) by month 24
+    clinic: C03
+    first_month_index: 13
+    start_share: 0.20
+    end_share: 0.40
+    end_month_index: 24
+  agency_wages:        # wage rate +12% with hours at standard and no noise
+    clinic: C15
+    first_month_index: 16
+    last_month_index: 18
+    factor: 1.12
+  closure:             # no visits, fixed costs still incurred
+    clinic: C09
+    month_index: 20

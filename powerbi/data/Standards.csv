@@ -1,0 +1,13 @@
+CostLine,VisitType,UnitCost,StdHours,StdWageRate
+clinical_labour,preventive,24.2,0.55,44.0
+clinical_labour,procedure,51.744,1.176,44.0
+clinical_labour,sick,22.44,0.51,44.0
+clinical_labour,urgent,33.0,0.75,44.0
+lab_sendouts,preventive,12.36,,
+lab_sendouts,procedure,20.4,,
+lab_sendouts,sick,9.7,,
+lab_sendouts,urgent,14.0,,
+medical_supplies,preventive,6.0,,
+medical_supplies,procedure,37.24,,
+medical_supplies,sick,9.18,,
+medical_supplies,urgent,20.8,,

@@ -1,0 +1,93 @@
+table FactVariance
+	lineageTag: ab852724-6b3e-58fe-a607-ecb344a8fd8f
+
+	column ClinicId
+		dataType: string
+		lineageTag: c5abc905-af93-55a9-b223-0f715e8a6813
+		summarizeBy: none
+		sourceColumn: ClinicId
+
+	column Date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: a470cc3c-d430-53c0-9e15-adc2b704eaf9
+		summarizeBy: none
+		sourceColumn: Date
+
+	column CostLine
+		dataType: string
+		lineageTag: ac486894-0bd7-51b7-8031-42534537e5b5
+		summarizeBy: none
+		sourceColumn: CostLine
+
+	column StaticBudget
+		dataType: double
+		lineageTag: add089e8-97b1-55ae-8bc2-8e23b1645ffc
+		summarizeBy: sum
+		sourceColumn: StaticBudget
+
+	column FlexedBudget
+		dataType: double
+		lineageTag: 0645f93d-524d-56ab-a851-b32897034e7a
+		summarizeBy: sum
+		sourceColumn: FlexedBudget
+
+	column FlexedBudgetActualMix
+		dataType: double
+		lineageTag: 9f7d807c-5ff2-5b06-9406-fd0e4d8c96ff
+		summarizeBy: sum
+		sourceColumn: FlexedBudgetActualMix
+
+	column ActualCost
+		dataType: double
+		lineageTag: 1922236e-dbc7-5952-95ef-e1370de61dba
+		summarizeBy: sum
+		sourceColumn: ActualCost
+
+	column VolumeVariance
+		dataType: double
+		lineageTag: 7f6cf43f-fdf0-55bd-9c3d-c63095dfb880
+		summarizeBy: sum
+		sourceColumn: VolumeVariance
+
+	column MixVariance
+		dataType: double
+		lineageTag: 61d8476a-a680-53ae-b6dc-839bdb24c76d
+		summarizeBy: sum
+		sourceColumn: MixVariance
+
+	column SpendingVariance
+		dataType: double
+		lineageTag: 92bbc24a-7647-51b6-9d17-e1a9ba8848f7
+		summarizeBy: sum
+		sourceColumn: SpendingVariance
+
+	column WageRateVariance
+		dataType: double
+		lineageTag: 7fe98bd7-6cb0-5625-ac2c-510a1e087e78
+		summarizeBy: sum
+		sourceColumn: WageRateVariance
+
+	column EfficiencyVariance
+		dataType: double
+		lineageTag: 8bcc3828-48c9-506d-a161-edaa171a66b1
+		summarizeBy: sum
+		sourceColumn: EfficiencyVariance
+
+	column TotalVariance
+		dataType: double
+		lineageTag: f020ea95-61f6-5a41-98f3-6d6bc57e9c10
+		summarizeBy: sum
+		sourceColumn: TotalVariance
+
+	partition FactVariance = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "/FactVariance.csv"), [Delimiter=",", Columns=13, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"ClinicId", type text}, {"Date", type date}, {"CostLine", type text}, {"StaticBudget", type number}, {"FlexedBudget", type number}, {"FlexedBudgetActualMix", type number}, {"ActualCost", type number}, {"VolumeVariance", type number}, {"MixVariance", type number}, {"SpendingVariance", type number}, {"WageRateVariance", type number}, {"EfficiencyVariance", type number}, {"TotalVariance", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

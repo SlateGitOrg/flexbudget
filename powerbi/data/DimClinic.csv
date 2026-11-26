@@ -1,0 +1,19 @@
+ClinicId,ClinicName,ClinicType,Region
+C01,Riverside,Primary care,North
+C02,Maple Grove,Urgent care,North
+C03,Harbor View,Primary care,East
+C04,Cedar Park,Primary care,East
+C05,Lakeside,Primary care,South
+C06,Northgate,Urgent care,North
+C07,Eastwood,Primary care,East
+C08,Fairmont,Primary care,West
+C09,Hillcrest,Primary care,West
+C10,Oak Terrace,Primary care,South
+C11,Pine Ridge,Urgent care,West
+C12,Westbrook,Primary care,West
+C13,Summit,Primary care,South
+C14,Meadowlane,Primary care,North
+C15,Brookfield,Primary care,East
+C16,Stonebridge,Urgent care,South
+C17,Elmhurst,Primary care,West
+C18,Parkview,Primary care,North

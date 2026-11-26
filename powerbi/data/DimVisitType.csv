@@ -1,0 +1,5 @@
+VisitType,VisitTypeName,SortOrder
+preventive,Preventive,1
+sick,Sick,2
+urgent,Urgent,3
+procedure,Procedure,4
