@@ -145,7 +145,7 @@ pytest -q
 ruff check . && ruff format --check .
 ```
 
-The suite runs offline and checks behaviour against hand-computed fixtures and the injected patterns: the decomposition identity for every clinic-line-month, the wage/efficiency split, each injected effect recovered from the engine output, calibration recovery within 5% with only the urgent supply standard flagged, the commentary gate, the CSV round trip of FactVariance, and `validate-pbi` on the shipped project plus broken copies (a measure on a missing column, a measure missing from the registry, a CSV header or type mismatch, a visual bound to a missing field).
+The suite runs offline and checks behaviour against hand-computed fixtures and the injected patterns: the decomposition identity for every clinic-line-month, the wage/efficiency split, each injected effect recovered from the engine output, calibration recovery within 5% for seed 7 (not for every seed, see the design notes) with only the urgent supply standard flagged, the commentary gate, the CSV round trip of FactVariance, and `validate-pbi` on the shipped project plus broken copies (a measure on a missing column, a measure missing from the registry, a CSV header or type mismatch, a visual bound to a missing field).
 
 ## Project layout
 
